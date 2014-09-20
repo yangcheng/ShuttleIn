@@ -30,7 +30,7 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my2);
         getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        mShuttleSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_list_item_1);
+        mShuttleSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_spinner_dropdown_item);
         getActionBar().setListNavigationCallbacks(mShuttleSpinnerAdapter,this);
 
 
@@ -46,7 +46,7 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
             @Override
             public void success(List<Route> routes, Response response) {
                 mShuttleSpinnerAdapter.addAll(routes);
-                mShuttleSpinnerAdapter.notifyDataSetChanged();
+                getActionBar().setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
             }
 
             @Override
