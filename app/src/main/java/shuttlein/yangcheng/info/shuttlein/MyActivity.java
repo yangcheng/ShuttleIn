@@ -1,11 +1,12 @@
 package shuttlein.yangcheng.info.shuttlein;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.util.LongSparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -17,18 +18,27 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.converter.JacksonConverter;
 import shuttlein.yangcheng.info.shuttlein.api.RouteService;
+import shuttlein.yangcheng.info.shuttlein.api.StopService;
 import shuttlein.yangcheng.info.shuttlein.model.Route;
+import shuttlein.yangcheng.info.shuttlein.model.Stop;
 
 
-public class MyActivity extends Activity implements ActionBar.OnNavigationListener {
+public class MyActivity extends Activity  {
 
 
     public static final String ENDPOINT = "http://dhuang-ld1.linkedin.biz:3000/shuttle/";
-    ArrayAdapter<Route> mShuttleSpinnerAdapter;
+    ArrayAdapter<Route> mRouteSpinnerAdapter;
 
-    Spinner spinner1;
-    Spinner spinner2;
+    ArrayAdapter<Stop> mStopSpinnerAdapter;
+    Spinner mRoutesSpinner;
+    Spinner mStopsSpinner;
     Route mCurrentRoute;
+
+    LongSparseArray<List<Stop>> mStops = new LongSparseArray<List<Stop>>();
+    private RestAdapter restAdapter;
+    private RouteService routeService;
+    private StopService stopService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,27 +50,51 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
         getActionBar().setCustomView(R.layout.actionbar_item);
 
 
-        spinner1 = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner1);
-        spinner2 = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner2);
-        mShuttleSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_spinner_dropdown_item);
+        mRoutesSpinner = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner1);
+        mStopsSpinner = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner2);
+        mRouteSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_spinner_dropdown_item);
 
-        spinner1.setAdapter(mShuttleSpinnerAdapter);
+        mStopSpinnerAdapter = new ArrayAdapter<Stop>(this,android.R.layout.simple_spinner_dropdown_item);
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
+        mRoutesSpinner.setAdapter(mRouteSpinnerAdapter);
+        mRoutesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                mCurrentRoute = mRouteSpinnerAdapter.getItem(i);
+                updateInfo(mCurrentRoute);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        }
+        );
+
+        mStopsSpinner.setAdapter(mStopSpinnerAdapter);
+
+        restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ENDPOINT).setConverter(new JacksonConverter())
                 .build();
         restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
 
-        RouteService service = restAdapter.create(RouteService.class);
+        if(routeService == null) {
+            routeService = restAdapter.create(RouteService.class);
+        }
 
-
-        service.listRoutes(new Callback<List<Route>>() {
+        routeService.listRoutes(new Callback<List<Route>>() {
             @Override
             public void success(List<Route> routes, Response response) {
-                mShuttleSpinnerAdapter.addAll(routes);
-                if(mShuttleSpinnerAdapter.getCount() > 0) {
-                    spinner1.setVisibility(View.VISIBLE);
+                mRouteSpinnerAdapter.clear();
+                mRouteSpinnerAdapter.addAll(routes);
+                if (mRouteSpinnerAdapter.getCount() > 0) {
+                    mRoutesSpinner.setVisibility(View.VISIBLE);
                 }
+                int index = mRoutesSpinner.getSelectedItemPosition();
+                if(index == -1 ) {
+                    index = 0;
+                }
+                mCurrentRoute = mRouteSpinnerAdapter.getItem(index);
+                updateInfo(mCurrentRoute);
             }
 
             @Override
@@ -93,14 +127,41 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(int i, long l) {
-        mCurrentRoute =  mShuttleSpinnerAdapter.getItem(i);
-        updateInfo();
-        return true;
-    }
+    void updateInfo(final Route route) {
+        if(route.getID() != mCurrentRoute.getID()) {
+            mStopSpinnerAdapter.clear();
+        }
 
-    void updateInfo() {
-        //TODO
+        List<Stop> stopList = mStops.get(route.getID());
+
+        if(stopList == null) {
+            //request
+            if(stopService == null) {
+                stopService = restAdapter.create(StopService.class);
+            }
+
+            stopService.listStops(route.getID(), new Callback<List<Stop>>() {
+                @Override
+                public void success(List<Stop> stops, Response response) {
+                    mStops.put(route.getID(), stops);
+                    updateInfo(route);
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
+
+        } else{
+            mStopSpinnerAdapter.clear();
+            mStopSpinnerAdapter.addAll(stopList);
+            if(mStopSpinnerAdapter.getCount() > 0) {
+                mStopsSpinner.setVisibility(View.VISIBLE);
+            }
+            //TODO update
+        }
+        mStopSpinnerAdapter.notifyDataSetChanged();
+
     }
 }
