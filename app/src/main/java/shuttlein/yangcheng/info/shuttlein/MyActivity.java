@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import java.util.List;
 
@@ -24,15 +26,25 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
     public static final String ENDPOINT = "http://dhuang-ld1.linkedin.biz:3000/shuttle/";
     ArrayAdapter<Route> mShuttleSpinnerAdapter;
 
+    Spinner spinner1;
+    Spinner spinner2;
     Route mCurrentRoute;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my2);
-        getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        mShuttleSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_spinner_dropdown_item);
-        getActionBar().setListNavigationCallbacks(mShuttleSpinnerAdapter,this);
 
+        getActionBar().setDisplayShowTitleEnabled(false);
+        getActionBar().setDisplayShowCustomEnabled(true);
+
+        getActionBar().setCustomView(R.layout.actionbar_item);
+
+
+        spinner1 = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner1);
+        spinner2 = (Spinner) getActionBar().getCustomView().findViewById(R.id.spinner2);
+        mShuttleSpinnerAdapter = new ArrayAdapter<Route>(this,android.R.layout.simple_spinner_dropdown_item);
+
+        spinner1.setAdapter(mShuttleSpinnerAdapter);
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(ENDPOINT).setConverter(new JacksonConverter())
@@ -46,7 +58,9 @@ public class MyActivity extends Activity implements ActionBar.OnNavigationListen
             @Override
             public void success(List<Route> routes, Response response) {
                 mShuttleSpinnerAdapter.addAll(routes);
-                getActionBar().setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
+                if(mShuttleSpinnerAdapter.getCount() > 0) {
+                    spinner1.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
