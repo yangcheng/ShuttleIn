@@ -12,11 +12,12 @@ import android.widget.Spinner;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import retrofit.converter.JacksonConverter;
 import shuttlein.yangcheng.info.shuttlein.api.RouteService;
 import shuttlein.yangcheng.info.shuttlein.api.StopService;
 import shuttlein.yangcheng.info.shuttlein.model.Route;
@@ -35,13 +36,14 @@ public class MyActivity extends Activity  {
     Route mCurrentRoute;
 
     LongSparseArray<List<Stop>> mStops = new LongSparseArray<List<Stop>>();
-    private RestAdapter restAdapter;
-    private RouteService routeService;
-    private StopService stopService;
+    @Inject RestAdapter restAdapter;
+    @Inject RouteService routeService;
+    @Inject StopService stopService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ShuttleApp.get(this).inject(this);
         setContentView(R.layout.activity_my2);
 
         getActionBar().setDisplayShowTitleEnabled(false);
@@ -72,14 +74,7 @@ public class MyActivity extends Activity  {
 
         mStopsSpinner.setAdapter(mStopSpinnerAdapter);
 
-        restAdapter = new RestAdapter.Builder()
-                .setEndpoint(ENDPOINT).setConverter(new JacksonConverter())
-                .build();
         restAdapter.setLogLevel(RestAdapter.LogLevel.FULL);
-
-        if(routeService == null) {
-            routeService = restAdapter.create(RouteService.class);
-        }
 
         routeService.listRoutes(new Callback<List<Route>>() {
             @Override
@@ -135,10 +130,6 @@ public class MyActivity extends Activity  {
         List<Stop> stopList = mStops.get(route.getID());
 
         if(stopList == null) {
-            //request
-            if(stopService == null) {
-                stopService = restAdapter.create(StopService.class);
-            }
 
             stopService.listStops(route.getID(), new Callback<List<Stop>>() {
                 @Override

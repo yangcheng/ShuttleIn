@@ -36,13 +36,13 @@ import java.util.Map;
 public class Route {
 
     @JsonProperty("ID")
-    private Long iD;
+    private long iD;
     @JsonProperty("ArrivalsEnabled")
     private Boolean arrivalsEnabled;
     @JsonProperty("DisplayName")
     private String displayName;
     @JsonProperty("CustomerID")
-    private Long customerID;
+    private long customerID;
     @JsonProperty("DirectionStops")
     private Object directionStops;
     @JsonProperty("Points")
@@ -68,19 +68,19 @@ public class Route {
     @JsonProperty("BackwardDirectionName")
     private Object backwardDirectionName;
     @JsonProperty("NumberOfVehicles")
-    private Long numberOfVehicles;
+    private long numberOfVehicles;
     @JsonProperty("Patterns")
     private List<Pattern> patterns = new ArrayList<Pattern>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("ID")
-    public Long getID() {
+    public long getID() {
         return iD;
     }
 
     @JsonProperty("ID")
-    public void setID(Long iD) {
+    public void setID(long iD) {
         this.iD = iD;
     }
 
@@ -105,12 +105,12 @@ public class Route {
     }
 
     @JsonProperty("CustomerID")
-    public Long getCustomerID() {
+    public long getCustomerID() {
         return customerID;
     }
 
     @JsonProperty("CustomerID")
-    public void setCustomerID(Long customerID) {
+    public void setCustomerID(long customerID) {
         this.customerID = customerID;
     }
 
@@ -235,12 +235,12 @@ public class Route {
     }
 
     @JsonProperty("NumberOfVehicles")
-    public Long getNumberOfVehicles() {
+    public long getNumberOfVehicles() {
         return numberOfVehicles;
     }
 
     @JsonProperty("NumberOfVehicles")
-    public void setNumberOfVehicles(Long numberOfVehicles) {
+    public void setNumberOfVehicles(long numberOfVehicles) {
         this.numberOfVehicles = numberOfVehicles;
     }
 
