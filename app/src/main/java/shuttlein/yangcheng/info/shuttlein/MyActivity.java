@@ -27,7 +27,7 @@ import shuttlein.yangcheng.info.shuttlein.model.Stop;
 public class MyActivity extends Activity  {
 
 
-    public static final String ENDPOINT = "http://dhuang-ld1.linkedin.biz:3000/shuttle/";
+    public static final String ENDPOINT = "http://www.shuttlein.dihuang.me/shuttle";
     ArrayAdapter<Route> mRouteSpinnerAdapter;
 
     ArrayAdapter<Stop> mStopSpinnerAdapter;
