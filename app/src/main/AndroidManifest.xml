@@ -12,7 +12,7 @@
         android:name=".ShuttleApp"
         >
         <activity
-            android:name="shuttlein.yangcheng.info.shuttlein.MyActivity"
+            android:name=".HomeActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

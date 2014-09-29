@@ -18,7 +18,7 @@ import shuttlein.yangcheng.info.shuttlein.api.StopService;
 @Module(
         injects = {
                 ShuttleApp.class,
-        MyActivity.class},
+        HomeActivity.class},
         library = true
 )
 public final class ShuttleModel {

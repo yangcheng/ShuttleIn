@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -25,7 +26,7 @@ import shuttlein.yangcheng.info.shuttlein.model.Route;
 import shuttlein.yangcheng.info.shuttlein.model.Stop;
 
 
-public class MyActivity extends Activity  {
+public class HomeActivity extends Activity  {
 
 
     ArrayAdapter<Route> mRouteSpinnerAdapter;
@@ -45,7 +46,7 @@ public class MyActivity extends Activity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ShuttleApp.get(this).inject(this);
-        setContentView(R.layout.activity_my2);
+        setContentView(R.layout.activity_home);
 
         getActionBar().setDisplayShowTitleEnabled(false);
         getActionBar().setDisplayShowCustomEnabled(true);
@@ -95,7 +96,7 @@ public class MyActivity extends Activity  {
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(MyActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -141,7 +142,7 @@ public class MyActivity extends Activity  {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Toast.makeText(MyActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomeActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             });
 
