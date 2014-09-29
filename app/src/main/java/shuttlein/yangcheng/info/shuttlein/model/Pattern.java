@@ -20,7 +20,7 @@ import java.util.Map;
 public class Pattern {
 
     @JsonProperty("ID")
-    private Long iD;
+    private long iD;
     @JsonProperty("Name")
     private String name;
     @JsonProperty("Direction")
@@ -31,12 +31,12 @@ public class Pattern {
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     @JsonProperty("ID")
-    public Long getID() {
+    public long getID() {
         return iD;
     }
 
     @JsonProperty("ID")
-    public void setID(Long iD) {
+    public void setID(long iD) {
         this.iD = iD;
     }
 

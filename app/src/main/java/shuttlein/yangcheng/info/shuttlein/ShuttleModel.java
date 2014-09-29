@@ -22,7 +22,7 @@ import shuttlein.yangcheng.info.shuttlein.api.StopService;
         library = true
 )
 public final class ShuttleModel {
-    public static final String ENDPOINT = "http://dhuang-ld1.linkedin.biz:3000/shuttle/";
+    public static final String ENDPOINT = "http://www.shuttlein.dihuang.me/shuttle";
 
     private final ShuttleApp app;
     public ShuttleModel(ShuttleApp app) {

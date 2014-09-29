@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -27,7 +28,6 @@ import shuttlein.yangcheng.info.shuttlein.model.Stop;
 public class MyActivity extends Activity  {
 
 
-    public static final String ENDPOINT = "http://www.shuttlein.dihuang.me/shuttle";
     ArrayAdapter<Route> mRouteSpinnerAdapter;
 
     ArrayAdapter<Stop> mStopSpinnerAdapter;
@@ -39,6 +39,7 @@ public class MyActivity extends Activity  {
     @Inject RestAdapter restAdapter;
     @Inject RouteService routeService;
     @Inject StopService stopService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public class MyActivity extends Activity  {
 
             @Override
             public void failure(RetrofitError error) {
-
+                Toast.makeText(MyActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -123,24 +124,24 @@ public class MyActivity extends Activity  {
     }
 
     void updateInfo(final Route route) {
-        if(route.getID() != mCurrentRoute.getID()) {
+        if(route.getRouteId() != mCurrentRoute.getRouteId()) {
             mStopSpinnerAdapter.clear();
         }
 
-        List<Stop> stopList = mStops.get(route.getID());
+        List<Stop> stopList = mStops.get(route.getRouteId());
 
         if(stopList == null) {
 
-            stopService.listStops(route.getID(), new Callback<List<Stop>>() {
+            stopService.listStops(route.getRouteId(), new Callback<List<Stop>>() {
                 @Override
                 public void success(List<Stop> stops, Response response) {
-                    mStops.put(route.getID(), stops);
+                    mStops.put(route.getRouteId(), stops);
                     updateInfo(route);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
-
+                    Toast.makeText(MyActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
                 }
             });
 

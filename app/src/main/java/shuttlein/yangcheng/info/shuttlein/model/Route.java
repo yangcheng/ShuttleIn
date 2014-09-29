@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -267,5 +268,12 @@ public class Route {
     @Override
     public String toString() {
         return shortName;
+    }
+
+    public long getRouteId() {
+        if(patterns!=null && patterns.size() >0) {
+            return patterns.get(0).getID();
+        }
+        return -1;
     }
 }
