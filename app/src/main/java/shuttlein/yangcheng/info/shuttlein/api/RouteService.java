@@ -2,8 +2,8 @@ package shuttlein.yangcheng.info.shuttlein.api;
 
 import java.util.List;
 
-import retrofit.Callback;
 import retrofit.http.GET;
+import rx.Observable;
 import shuttlein.yangcheng.info.shuttlein.model.Route;
 
 /**
@@ -11,5 +11,5 @@ import shuttlein.yangcheng.info.shuttlein.model.Route;
  */
 public interface RouteService {
     @GET("/region/0/routes")
-    void listRoutes(Callback<List<Route>> callback);
+    Observable<List<Route>> listRoutes();
 }

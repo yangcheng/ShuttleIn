@@ -2,9 +2,9 @@ package shuttlein.yangcheng.info.shuttlein.api;
 
 import java.util.List;
 
-import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.Path;
+import rx.Observable;
 import shuttlein.yangcheng.info.shuttlein.model.Stop;
 
 /**
@@ -12,6 +12,6 @@ import shuttlein.yangcheng.info.shuttlein.model.Stop;
  */
 public interface StopService {
     @GET("/route/{id}/direction/0/stops")
-    void listStops(@Path("id") long routeId, Callback<List<Stop>> callback);
+    Observable<List<Stop>> listStops(@Path("id") long routeId);
 
 }
